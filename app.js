@@ -1,23 +1,26 @@
-const os = require("os");
+const express = require("express");
+const app = express();
 const path = require("path");
-const fs = require("fs");
-const http = require("http");
-// Ctrl+c -> to quit the server
-// process.exit(),process.exit(1)
-const server = http
-  .createServer((req, res) => {
-    //console.log(req);
-    //console.log(req.url, req.method, req.headers);
-    const url = req.url;
-    if (url === "/") {
-      return res.end("Home Page");
-    }
-    if (url === "/about") {
-      return res.end("About Page");
-    }
+const adminRouter = require("./routes/admin");
+const shopRouter = require("./routes/shop");
+const dotenv = require("dotenv");
 
-    if (url === "/Contact") {
-      return res.end("Contact Page");
-    }
-  })
-  .listen(5000);
+// no need to install body-parser and use app.use(bodyParser.urlencode())
+// with the below step, bodyparsing is and integral part of express
+//app.set(dotenv.config());
+//const PORT = process.env.PORT;
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+
+//another way of importing directly
+//app.use("/", require("./routes/admin"));
+// with the below line, every route starts with '/'
+// if we put app.use('/admin',adminRouter), the route starts with https://localhost:5000/admin
+app.use("/admin", adminRouter);
+app.use(shopRouter);
+
+app.use((req, res, next) => {
+  res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
+});
+
+app.listen(5000);
