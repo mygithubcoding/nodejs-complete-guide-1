@@ -3,15 +3,23 @@ const router = express.Router();
 const path = require("path");
 const rootDir = require("../util/path");
 
+// Storing product details in this array
+const products = [];
+
 // you may/may not have next() method in get router
 
+// /admin/add-product   =>GET
 router.get("/add-product", (req, res, next) => {
   res.sendFile(path.join(rootDir, "views", "add-product.html"));
 });
 
-router.post("/product", (req, res) => {
-  console.log(req.body);
+// /admin/add-product   =>POST
+
+router.post("/add-product", (req, res) => {
+  console.log(products);
+  products.push(req.body);
   res.redirect("/");
 });
 
-module.exports = router;
+exports.router = router;
+exports.products = products;
