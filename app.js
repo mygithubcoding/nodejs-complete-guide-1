@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 app.set("view engine", "pug");
+app.set("views", "views");
+
 const path = require("path");
-const adminData = require("./routes/admin");
-const shopRouter = require("./routes/shop");
 const dotenv = require("dotenv");
 
 // no need to install body-parser and use app.use(bodyParser.urlencode())
@@ -18,8 +18,11 @@ app.use(express.static(path.join(__dirname, "public")));
 // with the below line, every route starts with '/'
 // if we put app.use('/admin',adminRouter), the route starts with https://localhost:5000/admin
 
-app.use(shopRouter);
-app.use("/admin", adminData.router);
+const adminData = require("./routes/admin");
+const shopRoutes = require("./routes/shop");
+
+app.use("/admin", adminData.routes);
+app.use(shopRoutes);
 
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
