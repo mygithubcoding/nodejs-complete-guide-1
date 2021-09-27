@@ -1,23 +1,29 @@
 const express = require("express");
 const app = express();
 const expressHbs = require("express-handlebars");
+
 // for handle-bars
 
-app.engine(
-  "hbs",
-  expressHbs({
-    layoutsDir: "views/layouts/",
-    defaultLayout: "main-layout",
-    extname: "hbs",
-  })
-);
-app.set("view engine", "hbs");
-app.set("views", "views");
+// app.engine(
+//   "hbs",
+//   expressHbs({
+//     layoutsDir: "views/layouts/",
+//     defaultLayout: "main-layout",
+//     extname: "hbs",
+//   })
+// );
+// app.set("view engine", "hbs");
+// app.set("views", "views");
 
 // The following for pug engine
 
 //app.set("view engine", "pug");
 //app.set("views", "views");
+
+// The following for ejs engine
+
+app.set("view engine", "ejs");
+app.set("views", "views");
 
 const path = require("path");
 const dotenv = require("dotenv");
